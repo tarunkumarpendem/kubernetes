@@ -1,0 +1,27 @@
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: nginx-rc-pod
+  labels:
+    name: nginx-rc
+    version: 1.0
+    env: dev
+spec:
+  minReadySeconds: 3
+  replicas: 5
+  selector: 
+    name: nginx-rc
+  template:
+    metadata:
+      name: nginx
+    spec:
+      activeDeadlineSeconds: 5
+      containers:
+        - image: nginx:1.23 
+          name: nginx-1.23-rc
+          ports:
+            - containerPort: 80
+              protocol: TCP
+                  
+    

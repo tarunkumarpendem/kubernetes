@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: spring-petclinic
+  labels:
+    app: spc
+    ver: 2.4.2
+spec:
+  containers:
+    - image: openjdk:11
+      

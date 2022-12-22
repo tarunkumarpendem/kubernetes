@@ -1,0 +1,35 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata: 
+  name: cronjob-1
+  namespace: my-cron-namespace
+spec:
+  schedule: "0 23 * * *"
+  jobTemplate:
+    metadata:
+      name: alpine
+      namespace: spc-cron-namespace
+      labels:
+        img: alpine
+        app: spc
+    spec:
+      selector:
+        matchLabels:
+          img: alpine
+          app: spc   
+      template:
+        metadata:
+          name: alpine
+          namespace: spc-cron-namespace
+        spec:
+          containers:
+            - image: alpine:3
+              name: spring-petclinic
+              command:
+                - apk update
+                - apk install wget -y
+                - wget https://referenceapplicationskhaja.s3.us-west-2.amazonaws.com/spring-petclinic-2.4.2.jar  
+          
+        
+          

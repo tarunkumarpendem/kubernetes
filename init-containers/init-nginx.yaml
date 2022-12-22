@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: init-containers
+  initContainersQty: two
+spec:
+  initContainers:
+    - image: alpine:3
+      name: init-alpine-1
+      command: 
+        - sleep
+      args:
+        - "5s"
+    - image: alpine:3
+      name: init-alpine-2
+      command: 
+        - sleep
+        - "30s"  
+  containers:      
+    - image: jenkins/jenkins:jdk11
+      name: jenkins
+      ports: 
+        - containerPort: 8080
+          protocol: TCP       
+  
