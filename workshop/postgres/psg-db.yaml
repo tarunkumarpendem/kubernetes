@@ -1,0 +1,32 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    db: psg
+  name: postgres
+spec:
+  minReadySeconds: 5
+  replicas: 1
+  selector:
+    matchLabels:
+      name: postgres
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: 
+      maxSurge: 25%
+      maxUnavailable: 25%     
+  template:
+    metadata:
+      name: postgres
+      labels:
+        name: postgres
+    spec:
+      containers:
+        - image: library/postgres:13-alpine
+          name: postgres-db
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+                
+

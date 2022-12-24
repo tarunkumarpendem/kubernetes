@@ -1,0 +1,32 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: saleor-core
+  name: saleor-core
+spec:
+  minReadySeconds: 5
+  replicas: 1
+  selector:
+    matchLabels:
+      name: saleor-core
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: 
+      maxSurge: 25%
+      maxUnavailable: 25%     
+  template:
+    metadata:
+      name: redis
+      labels:
+        name: saleor-core
+    spec:
+      containers:
+        - image: tarunkumarpendem/saleor-core:DEV#
+          name: saleor-core
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+                
+
