@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  app: GameOfLife
+  name: GameOfLife
   labels:
     name: gameoflife
     version: jdk8
