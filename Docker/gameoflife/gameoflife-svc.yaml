@@ -11,5 +11,5 @@ spec:
     app: gameoflife
   ports:
     - port: 8080
-      name: GameOfLifeWebPort
+      name: gameoflife-webport
       targetPort: 8080
