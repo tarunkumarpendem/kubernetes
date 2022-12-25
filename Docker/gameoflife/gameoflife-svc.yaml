@@ -2,15 +2,13 @@
 apiVersion: v1
 kind: Service
 metadata: 
-  name: GameOfLifeSVC
+  name: gameoflife-svc
   labels:
     app: gameoflife
-    type: service
 spec:
   type: LoadBalancer
   selector:
-    app: game-of-life
-    version: jdk8
+    app: gameoflife
   ports:
     - port: 8080
       name: GameOfLifeWebPort
