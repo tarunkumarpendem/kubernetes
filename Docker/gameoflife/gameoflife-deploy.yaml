@@ -21,7 +21,7 @@ spec:
     metadata:
       name: game-of-life
       labels:
-        app: gameoflife
+        name: gameoflife
         version: jdk8
     spec:
       containers:
