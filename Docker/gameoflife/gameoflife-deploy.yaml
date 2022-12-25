@@ -11,7 +11,7 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      name: game-of-life
+      name: gameoflife
   strategy:
     type: RollingUpdate
     rollingUpdate:
