@@ -25,7 +25,7 @@ spec:
         version: jdk8
     spec:
       containers:
-        - image: 
+        - image: tarunkumarpendem/gol:1.0 
           name: game-of-life
           ports:
             - containerPort: 8080
