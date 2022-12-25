@@ -3,9 +3,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: openmrs
+  labels:
+    name: openmrs
+    version: 1.0
 spec:
   minReadySeconds: 5
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       name: openmrs
@@ -13,15 +16,20 @@ spec:
     type: RollingUpdate
     rollingUpdate:
       maxSurge: 25%
-      maxUnavailable: 25%    
+      maxUnavailable: 25%
   template:
     metadata:
       name: openmrs
+      labels:
+        name: openmrs
+        version: 1.0
     spec:
       containers:
-        - image: tarunkumarpendem/openmrs:1.0
+        - image: tarunkumarpendem/openmrs:1.0 
           name: openmrs
           ports:
             - containerPort: 8080
-              protocol: TCP 
+              protocol: TCP
                 
+      
+

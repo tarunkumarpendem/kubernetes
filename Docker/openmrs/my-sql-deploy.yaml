@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: MysqldbDeploy
+  name: mysql-db-deploy
   labels:
     db: mysql
     type: deployment
@@ -19,7 +19,7 @@ spec:
         maxUnavailable: 25%
     template:
       metadata:
-        name: MysqldbDeploy
+        name: mysqldb-deploy
       spec:
         containers:
           - image: mysql:8.0.31-debian
@@ -29,8 +29,8 @@ spec:
                 protocol: TCP
             volumeMounts:
               mountPath: /var/lib/mysql
-              name: MYSQLvol
+              name: mysql-vol
         volumes: 
           - persistentVolumeClaim: 
-              claimName: openmrsPVC
+              claimName: openmrs-pvc
               readOnly: true                   
