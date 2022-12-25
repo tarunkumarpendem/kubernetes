@@ -9,7 +9,7 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    app: gameoflife
+    app: game-of-life
     version: jdk8
   ports:
     - port: 8080
