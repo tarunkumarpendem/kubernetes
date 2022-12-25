@@ -1,0 +1,14 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: VolumeAttachment
+metadata:
+  name: RedisPvcAttachmnet
+  labels:
+    name: Pvcredis
+    voulme: pvcRedis
+spec:
+  source:
+    persistentVolumeName: persistentvolumeclaimRedis
+    
+      
+  

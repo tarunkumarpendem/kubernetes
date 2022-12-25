@@ -1,0 +1,14 @@
+---
+apiVersion: v1 
+kind: PersistentVolumeClaim
+metadata:
+  name: persistentvolumeclaimRedis
+  labels:
+    name: pvcRedis
+    db: pvc-db
+spec:
+  selector:
+    matchLabels:
+      name: pvcRedis
+  volumeName: saleor-redis:/data    
+  

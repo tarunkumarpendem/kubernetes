@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: openmrsSVC
+  labels:
+    app: openmrs
+    type: service
+spec:
+  type: LoadBalancer
+  selector:
+    app: openmrs
+    version: 1.0
+  ports:
+    - port: 8080
+      name: OpenmrsWebPort
+      targetPort: 8080

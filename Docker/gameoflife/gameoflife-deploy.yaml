@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  app: GameOfLife
+  labels:
+    name: gameoflife
+    version: jdk8
+spec:
+  minReadySeconds: 5
+  replicas: 3
+  selector:
+    matchLabels:
+      name: gameoflife
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      name: GameOfLife
+      labels:
+        app: gameoflife
+        version: jdk8
+    spec:
+      containers:
+        - image: 
+          name: GameOfLife
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+                
+      
+

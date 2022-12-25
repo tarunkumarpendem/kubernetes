@@ -1,0 +1,14 @@
+---
+apiVersion: v1 
+kind: PersistentVolumeClaim
+metadata:
+  name: persistentvolumeclaim
+  labels:
+    name: pvc
+    db: psg-db
+spec:
+  selector:
+    matchLabels:
+      name: pvc
+  volumeName: saleor-db:/var/lib/postgresql/data    
+  

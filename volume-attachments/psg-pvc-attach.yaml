@@ -1,0 +1,14 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: VolumeAttachment
+metadata:
+  name: PsgPvcAttachmnet
+  labels:
+    name: psg-pvc
+    voulme: pvc
+spec:
+  source:
+    persistentVolumeName: persistentvolumeclaim
+    
+      
+  

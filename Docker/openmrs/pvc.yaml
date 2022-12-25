@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: openmrsPVC
+  labels:
+    app: openmrs
+spec:
+  selector:
+    matchLabels:
+      app: openmrs
+  storageClassName: gp2
+  accessModes:
+    - ReadWriteMany
+  volumeName: mysqlvol
+  resources:
+    limits:
+      requests:
+        storage: "1Gi"      
+      

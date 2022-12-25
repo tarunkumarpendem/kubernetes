@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: MysqldbDeploy
+  labels:
+    db: mysql
+    type: deployment
+spec:
+  minReadySeconds: 10
+  replicas: 1
+  selector:
+    matchLabels:
+      db: mysql
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+    template:
+      metadata:
+        name: MysqldbDeploy
+      spec:
+        containers:
+          - image: mysql:8.0.31-debian
+            name: MYSQL 
+            ports:
+              - containerPort: 3306
+                protocol: TCP
+            volumeMounts:
+              mountPath: /var/lib/mysql
+              name: MYSQLvol
+        volumes: 
+          - persistentVolumeClaim: 
+              claimName: openmrsPVC
+              readOnly: true                   
