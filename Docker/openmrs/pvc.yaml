@@ -13,8 +13,7 @@ spec:
   accessModes:
     - ReadWriteMany
   volumeName: mysqlvol
-  resources:
-    limits:
-      requests:
-        storage: "1Gi"      
+  resources:   
+    requests:
+      storage: 1Gi      
       
