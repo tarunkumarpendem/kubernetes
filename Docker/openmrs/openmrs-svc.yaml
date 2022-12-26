@@ -10,6 +10,7 @@ spec:
   type: LoadBalancer
   selector:
     app: openmrs
+    name: openmrs
   ports:
     - port: 8080
       name: openmrs-web-port

@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata: 
-  name: mysql-sv
+  name: mysql-svc
   labels:
     db: mysql
     type: service
@@ -10,6 +10,7 @@ spec:
   type: ClusterIP
   selector:
     db: mysql
+    name: mysql-db-deploy
   ports:
     - port: 3306
       name: mysql-port
