@@ -1,0 +1,122 @@
+---
+apiVersion: apps/v1
+metadata:
+  name: game-of-life-deploy
+  labels: 
+    app1: game-of-life-deploy
+kind: Deployment
+spec:
+  minReadySeconds: 3
+  replicas: 1
+  selector:
+    matchLabels:
+      app1: game-of-life-deploy
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      name: game-of-life-deploy
+      labels:
+        app1: game-of-life-deploy
+    spec:
+      containers:
+        - image: tarunkumarpendem/gol:1.0
+          name: game-of-life
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+
+---
+apiVersion: apps/v1
+metadata:
+  name: openmrs-deploy 
+  labels: 
+    app2: openmrs-deploy
+kind: Deployment
+spec:
+  minReadySeconds: 3
+  replicas: 1
+  selector:
+    matchLabels:
+      app2: openmrs-deploy
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      name: openmrs-deploy
+      labels:
+        app2: openmrs-deploy
+    spec:
+      containers:
+        - image: tarunkumarpendem/openmrs:1.0
+          name: openmrs
+          ports:
+            - containerPort: 8080
+              protocol: TCP              
+        
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apps-svc
+  labels:
+    name: apps-svc
+spec:
+  ports:
+    - port: 20000
+      targetPort: 8080
+      protocol: TCP
+      name: apps-webport-1
+    - port: 10000
+      targetPort: 8080
+      protocol: TCP
+      name: apps-webport-2  
+  selector:
+    app1: game-of-life-deploy 
+    app2: openmrs-deploy
+
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress
+  annotations:
+    kubernetes.io/ingress.class: service.beta.kubernetes.io/aws-load-balancer-healthcheck-path
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /gameoflife
+            backend:
+              service:
+                name: apps-svc
+                port:
+                  number: 20000
+            pathType: Exact
+          - path: /openmrs
+            backend:
+              service:
+                name: apps-svc
+                port:
+                  number: 10000
+            pathType: Exact               
+                               
+
+
+              
+
+
+        
+
+
+              
+      

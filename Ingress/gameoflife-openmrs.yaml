@@ -30,6 +30,37 @@ spec:
 
 
 ---
+apiVersion: apps/v1
+metadata: 
+  name: openmrs-deploy
+kind: Deployment
+spec:
+  minReadySeconds: 3
+  replicas: 1
+  selector:
+    matchLabels:
+      name: openmrs-deploy
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      name: openmrs-deploy
+    spec:
+      containers:
+        - image: tarunkumarpendem/openmrs:1.0
+          name: openmrs
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            limits:
+              storage: 10Gi              
+
+
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -46,23 +77,48 @@ spec:
 
 
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: openmrs-svc
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: openmrs-webport
+  selector:
+    name: openmrs-deploy
+  type: LoadBalancer  
+
+
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: game-of-life-ingress
+  name: ingress
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-healthcheck-path: /
 spec:
   rules:
     - http:
         paths:
-          - path: /
+          - path: /gameoflife
             backend:
               service:
                 name: game-of-life-svc
                 port:
                   number: 8080
-            pathType: Exact      
+            pathType: Exact
+    - http:  
+        paths:
+          - path: /openmrs
+            backend:
+              service:
+                name: openmrs-svc
+                port:
+                  number: 8080
+            pathType: Exact              
 
 
         
