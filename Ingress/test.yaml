@@ -82,6 +82,7 @@ spec:
   selector:
     app1: game-of-life-deploy 
     app2: openmrs-deploy
+  type: LoadBalancer  
 
 
 ---
