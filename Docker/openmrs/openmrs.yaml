@@ -5,7 +5,6 @@ metadata:
   name: openmrs
   labels:
     name: openmrs
-    version: 1.0
 spec:
   minReadySeconds: 5
   replicas: 3
@@ -22,7 +21,6 @@ spec:
       name: openmrs
       labels:
         name: openmrs
-        version: 1.0
     spec:
       containers:
         - image: tarunkumarpendem/openmrs:1.0 
