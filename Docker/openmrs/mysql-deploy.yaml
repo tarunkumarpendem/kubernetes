@@ -19,7 +19,7 @@ spec:
       maxUnavailable: 25%
   template:
     metadata:
-      name: mysqldb-deploy
+      name: mysql-db-deploy
     spec:
       containers:
         - image: mysql:8.0.31-debian
@@ -33,4 +33,4 @@ spec:
       volumes: 
         - persistentVolumeClaim: 
             claimName: openmrs-pvc
-            readOnly: true                   
+            readOnly: false                   
