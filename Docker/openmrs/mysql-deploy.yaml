@@ -28,8 +28,8 @@ spec:
             - containerPort: 3306
               protocol: TCP
           volumeMounts:
-            mountPath: /var/lib/mysql
-            name: mysql-pvc-vol
+            - mountPath: /var/lib/mysql
+              name: mysql-pvc-vol
       volumes: 
         - name: mysql-pvc-vol
           persistentVolumeClaim: 
