@@ -20,6 +20,9 @@ spec:
   template:
     metadata:
       name: mysql-db-deploy
+      labels:
+        db: mysql
+        name: mysql-db-deploy
     spec:
       containers:
         - image: mysql:8.0.31-debian
