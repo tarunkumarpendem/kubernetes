@@ -29,8 +29,7 @@ spec:
               protocol: TCP
           volumeMounts:
             mountPath: /var/lib/mysql
-            name: mysql-vol
+            name: openmrs-pvc
       volumes: 
         - persistentVolumeClaim: 
-            claimName: openmrs-pvc
-            readOnly: false                   
+            claimName: openmrs-pvc                  
