@@ -1,0 +1,72 @@
+---
+apiVersion: apps/v1
+metadata: 
+  name: gameoflife-deploy
+kind: Deployment
+spec:
+  minReadySeconds: 3
+  replicas: 1
+  selector:
+    matchLabels:
+      name: gameoflife-deploy
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      name: gameoflife-deploy
+    spec:
+      containers:
+        - image: tarunkumarpendem/gol:1.0
+          name: game-of-life
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            limits:
+              storage: 10Gi
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: game-of-life-svc
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: gameoflife-webport
+  selector:
+    name: gameoflife-deploy
+  type: LoadBalancer
+
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: game-of-life-ingress
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-path: /
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            backend:
+              service:
+                name: game-of-life-svc
+                port:
+                  number: 8080
+            pathType: Exact      
+
+
+        
+
+
+              
+      

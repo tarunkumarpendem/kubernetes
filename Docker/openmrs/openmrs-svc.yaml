@@ -9,7 +9,6 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    app: openmrs
     name: openmrs
   ports:
     - port: 8080
