@@ -54,7 +54,7 @@ spec:
         app2: openmrs-deploy
     spec:
       containers:
-        - image: tarunkumarpendem/openmrs:1.0
+        - image: tarunkumarpendem/openmrs:1.1
           name: openmrs
           ports:
             - containerPort: 8080
