@@ -5,7 +5,7 @@ metadata:
   name: mysql-db-deploy
   labels:
     db: mysql
-    type: deployment
+    name: mysql-db-deploy
 spec:
   minReadySeconds: 10
   replicas: 1
@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - image: mysql:8.0.31-debian
-          name: MYSQL 
+          name: mysql-db 
           ports:
             - containerPort: 3306
               protocol: TCP
