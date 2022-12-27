@@ -71,11 +71,11 @@ metadata:
     name: apps-svc
 spec:
   ports:
-    - port: 20000
+    - port: 10000
       targetPort: 8080
       protocol: TCP
       name: apps-webport-1
-    - port: 10000
+    - port: 20000
       targetPort: 8080
       protocol: TCP
       name: apps-webport-2  
@@ -94,22 +94,22 @@ metadata:
     kubernetes.io/ingress.class: service.beta.kubernetes.io/aws-load-balancer-healthcheck-path
 spec:
   rules:
-    - http:
-        host: openmrs-gol-spc-ingress
+    - host: openmrs-gol-spc-ingress
+      http:
         paths:
           - path: /gameoflife
             backend:
               service:
                 name: apps-svc
                 port:
-                  number: 20000
+                  number: 10000
             pathType: Exact
           - path: /openmrs
             backend:
               service:
                 name: apps-svc
                 port:
-                  number: 10000
+                  number: 20000
             pathType: Exact               
                                
 

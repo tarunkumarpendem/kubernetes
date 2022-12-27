@@ -12,7 +12,7 @@ spec:
       protocol: TCP
       targetPort: 8000
   selector:
-    name: saleor-core
+    name: saleor-core  
     
         
   

@@ -28,5 +28,12 @@ spec:
           ports:
             - containerPort: 5432
               protocol: TCP
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-pvc    
+      volumes: 
+        - name: postgres-pvc
+          persistentVolumeClaim:
+            claimName: saleor-pvc        
                 
 

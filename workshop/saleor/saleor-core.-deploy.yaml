@@ -23,10 +23,10 @@ spec:
         name: saleor-core
     spec:
       containers:
-        - image: tarunkumarpendem/saleor-core:DEV#
+        - image: tarunkumarpendem/saleor-core:dev-1.0
           name: saleor-core
           ports:
             - containerPort: 8000
               protocol: TCP
-                
+          
 

@@ -51,7 +51,7 @@ metadata:
     version: jdk8
 spec:
   minReadySeconds: 5
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       name: gameoflife
@@ -93,7 +93,6 @@ spec:
   ports:
     - port: 8080
       name: gameoflife-webport
-      targetPort: 8080
 ``` 
 * Then appply these yaml files to create deployments and services from K8s cluster
 ![preview](Images/k8s4.png)
@@ -195,8 +194,7 @@ spec:
     app: spring-petclinic
   ports:
     - port: 8080
-      name: spring-petclinic-webport
-      targetPort: 8080     
+      name: spring-petclinic-webport     
 ``` 
 * Then appply these yaml files to create deployments and services from K8s cluster
 ![preview](Images/k8s19.png)
@@ -303,7 +301,6 @@ spec:
   ports:
     - port: 8080
       name: openmrs-web-port
-      targetPort: 8080
 ``` 
 
 Manifest written to create PersistentVolumeClaim(PVC):
@@ -390,7 +387,6 @@ spec:
   ports:
     - port: 3306
       name: mysql-port
-      targetPort: 3306
 ```
 * Then appply these yaml files to create Deployments, Volumes and Services from K8s cluster
 ![preview](Images/k8s9.png)
@@ -481,11 +477,11 @@ metadata:
     name: apps-svc
 spec:
   ports:
-    - port: 20000
+    - port: 10000
       targetPort: 8080
       protocol: TCP
       name: apps-webport-1
-    - port: 10000
+    - port: 20000
       targetPort: 8080
       protocol: TCP
       name: apps-webport-2  
@@ -504,26 +500,28 @@ metadata:
     kubernetes.io/ingress.class: service.beta.kubernetes.io/aws-load-balancer-healthcheck-path
 spec:
   rules:
-    - http:
-        host: openmrs-gol-spc-ingress
+    - host: openmrs-gol-spc-ingress
+      http:
         paths:
           - path: /gameoflife
             backend:
               service:
                 name: apps-svc
                 port:
-                  number: 20000
+                  number: 10000
             pathType: Exact
           - path: /openmrs
             backend:
               service:
                 name: apps-svc
                 port:
-                  number: 10000
-            pathType: Exact                              
+                  number: 20000
+            pathType: Exact                                             
 ```
 * Apply the manifest and check for workloads it created
 ![preview](Images/k8s12.png)
+![preview](Images/k8s34.png)
+![preview](Images/k8s35.png)
 * Try to access the applications
 
 Here ingress is created but it doesn't gave ExternalIp which i need to clarify
@@ -537,3 +535,433 @@ Errors:
 
 Because of the above error i'm getting till only this 
 ![preview](/Images/k8s1.png)
+
+
+
+
+## Saleor-core:
+---------------
+* Manually trying to containarize the python based application saleor-core
+    steps:
+    ------
+    * clone the repo `git clone https://github.com/saleor/saleor-platform.git --recursive --jobs 3`
+    * cd to the folder `cd saleor-platform`
+    * build the code using docker compose `docker compose build`
+    * then follow the below steps to containarize the application
+    `docker compose run --rm api python3 manage.py migrate`
+    `docker compose run --rm api python3 manage.py collectstatic --noinput`
+    `docker compose run --rm api python3 manage.py populatedb`
+    `docker compose run --rm api python3 manage.py createsuperuser`
+    `docker compose up -d`
+* then access the application 
+![preview](Images/k8s21.png)
+
+* Now build the image for saleor-dashboard and push it to dockerhub from jenkins
+clone the code from `https://github.com/saleor/saleor-dashboard.git` then cd into it `cd saleor-dashboard` then build and push the image from the Dockerfile in the repo doing this from jenkins
+```Dockerfile
+FROM node:18-alpine as builder
+WORKDIR /app
+COPY package*.json ./
+COPY scripts/patchReactVirtualized.js scripts/
+ENV CI 1
+RUN npm ci --omit=optional --legacy-peer-deps
+
+COPY nginx/ nginx/
+COPY assets/ assets/
+COPY locale/ locale/
+COPY scripts/removeSourcemaps.js scripts/
+COPY codegen.yml ./
+COPY vite.config.js ./
+COPY tsconfig.json ./
+COPY sw.js ./
+COPY *.d.ts ./
+COPY schema.graphql ./
+COPY introspection.json ./
+COPY src/ src/
+
+ARG API_URI
+ARG APP_MOUNT_URI
+ARG MARKETPLACE_URL
+ARG SALEOR_APPS_ENDPOINT
+ARG STATIC_URL
+ARG SKIP_SOURCEMAPS
+
+ENV API_URI ${API_URI:-http://localhost:8000/graphql/}
+ENV APP_MOUNT_URI ${APP_MOUNT_URI:-/dashboard/}
+ENV MARKETPLACE_URL ${MARKETPLACE_URL}
+ENV SALEOR_APPS_ENDPOINT=${SALEOR_APPS_ENDPOINT}
+ENV STATIC_URL ${STATIC_URL:-/dashboard/}
+ENV SKIP_SOURCEMAPS ${SKIP_SOURCEMAPS:-true}
+RUN npm run build
+
+FROM nginx:stable-alpine as runner
+WORKDIR /app
+
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY ./nginx/replace-api-url.sh /docker-entrypoint.d/50-replace-api-url.sh
+COPY --from=builder /app/build/ /app/
+
+LABEL org.opencontainers.image.title="saleor/saleor-dashboard"                                  \
+      org.opencontainers.image.description="A GraphQL-powered, single-page dashboard application for Saleor." \
+      org.opencontainers.image.url="https://saleor.io/"                                \
+      org.opencontainers.image.source="https://github.com/saleor/saleor-dashboard"     \
+      org.opencontainers.image.revision="$COMMIT_ID"                                   \
+      org.opencontainers.image.version="$PROJECT_VERSION"                              \
+      org.opencontainers.image.authors="Saleor Commerce (https://saleor.io)"           \
+      org.opencontainers.image.licenses="BSD 3"
+```
+
+```groovy
+pipeline{
+    agent{
+        label 'node-1'
+    }
+    stages{
+        stage('clone'){
+            steps{
+                git url: 'https://github.com/tarunkumarpendem/saleor-dashboard.git',
+                    branch: 'dev'
+            }
+        }
+        stage('docker_image_build'){
+            steps{
+                sh """
+                      docker image build -t saleor-dashboard:dev .
+                      docker image tag saleor-dashboard:dev tarunkumarpendem/saleor-dashboard:dev
+                      docker image push tarunkumarpendem/saleor-dashboard:dev
+                    """  
+            }
+        }
+    } 
+}
+```
+![preview](Images/k8s22.png)
+![preview](Images/k8s23.png)
+* then try to run the container with image which is pushed to dockerhub
+![preview](Images/k8s24.png)
+
+* Now do the same for saleor also
+clone the code from `https://github.com/tarunkumarpendem/saleor.git`
+then build the image from the Dokcerfile push it to registry as above from Jenkins
+```Dockerfile
+### Build and install packages
+FROM python:3.9 as build-python
+
+RUN apt-get -y update \
+  && apt-get install -y gettext \
+  # Cleanup apt cache
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements_dev.txt /app/
+WORKDIR /app
+RUN pip install -r requirements_dev.txt
+
+### Final image
+FROM python:3.9-slim
+
+RUN groupadd -r saleor && useradd -r -g saleor saleor
+
+RUN apt-get update \
+  && apt-get install -y \
+  libcairo2 \
+  libgdk-pixbuf2.0-0 \
+  liblcms2-2 \
+  libopenjp2-7 \
+  libpango-1.0-0 \
+  libpangocairo-1.0-0 \
+  libssl1.1 \
+  libtiff5 \
+  libwebp6 \
+  libxml2 \
+  libpq5 \
+  shared-mime-info \
+  mime-support \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN echo 'image/webp webp' >> /etc/mime.types
+
+RUN mkdir -p /app/media /app/static \
+  && chown -R saleor:saleor /app/
+
+COPY --from=build-python /usr/local/lib/python3.9/site-packages/ /usr/local/lib/python3.9/site-packages/
+COPY --from=build-python /usr/local/bin/ /usr/local/bin/
+COPY . /app
+WORKDIR /app
+
+ARG STATIC_URL
+ENV STATIC_URL ${STATIC_URL:-/static/}
+RUN SECRET_KEY=dummy STATIC_URL=${STATIC_URL} python3 manage.py collectstatic --no-input
+
+EXPOSE 8000
+ENV PYTHONUNBUFFERED 1
+
+ARG COMMIT_ID
+ARG PROJECT_VERSION
+ENV PROJECT_VERSION="${PROJECT_VERSION}"
+
+LABEL org.opencontainers.image.title="mirumee/saleor"                                  \
+      org.opencontainers.image.description="\
+A modular, high performance, headless e-commerce platform built with Python, \
+GraphQL, Django, and ReactJS."                                                         \
+      org.opencontainers.image.url="https://saleor.io/"                                \
+      org.opencontainers.image.source="https://github.com/saleor/saleor"               \
+      org.opencontainers.image.revision="$COMMIT_ID"                                   \
+      org.opencontainers.image.version="$PROJECT_VERSION"                              \
+      org.opencontainers.image.authors="Saleor Commerce (https://saleor.io)"           \
+      org.opencontainers.image.licenses="BSD 3"
+
+CMD ["gunicorn", "--bind", ":8000", "--workers", "4", "--worker-class", "saleor.asgi.gunicorn_worker.UvicornWorker", "saleor.asgi:application"]
+```
+* Jenkins pipeline for building and pushing saleor image
+
+```groovy
+pipeline{
+    triggers{
+        pollSCM('* * * * *')
+    }
+    agent any
+    stages{
+        stage('clone'){
+            agent{
+                 label 'node-1'
+            }
+            steps{
+                git url: 'https://github.com/tarunkumarpendem/saleor.git',
+                    branch: 'dev'
+            }
+        }
+        stage('docker_image_build and push'){
+            agent{
+                label 'node-1'
+            }
+            steps{
+                sh """docker image build -t saleor-core:dev-1.0 .
+                      docker image tag saleor-core:dev-1.0 tarunkumarpendem/saleor-core:dev-1.0
+                      docker image push tarunkumarpendem/saleor-core:dev-1.0
+                    """ 
+            }
+        }
+    }
+}
+```
+![preview](Images/k8s25.png)
+![preview](Images/k8s26.png)
+
+
+* To deploy it from K8s we need manifests:
+------------------------------------------
+* We need a volume which should persist for databases so creating a PersistentVolumeClaim and attach the volume to both the databases
+ * Manifest for PVC:
+  -----------------
+```yaml
+  ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: saleor-pvc
+  labels:
+    app: saleor
+spec:
+  selector:
+    matchLabels:
+      app: saleor
+  storageClassName: gp2
+  accessModes:
+    - ReadWriteMany
+  volumeName: mysqlvol
+  resources:   
+    requests:
+      storage: 10Gi      
+```
+   * For redis cache databse:
+     -------------------------
+         * Manifest written for redis database deployment
+```yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    db: redis
+  name: redis
+spec:
+  minReadySeconds: 5
+  replicas: 1
+  selector:
+    matchLabels:
+      name: redis
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: 
+      maxSurge: 25%
+      maxUnavailable: 25%     
+  template:
+    metadata:
+      name: redis
+      labels:
+        name: redis
+    spec:
+      containers:
+        - image: library/redis:5.0-alpine
+          name: redis-db
+          ports:
+            - containerPort: 6379
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /data
+              name: redis-pvc    
+      volumes: 
+        - name: redis-pvc
+          persistentVolumeClaim:
+            claimName: saleor-pvc                
+```
+
+* Manifest written for redis db service
+```yml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    db: redis-db
+  name: redis  
+spec:
+  type: ClusterIP
+  ports:
+    - port: 6379  
+      protocol: TCP
+      targetPort: 6379
+  selector:
+    name: redis  
+```
+
+* Manifest for postgres database deployment:
+--------------------------------------------
+```yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    db: psg
+  name: postgres
+spec:
+  minReadySeconds: 5
+  replicas: 1
+  selector:
+    matchLabels:
+      name: postgres
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: 
+      maxSurge: 25%
+      maxUnavailable: 25%     
+  template:
+    metadata:
+      name: postgres
+      labels:
+        name: postgres
+    spec:
+      containers:
+        - image: library/postgres:13-alpine
+          name: postgres-db
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-pvc    
+      volumes: 
+        - name: postgres-pvc
+          persistentVolumeClaim:
+            claimName: saleor-pvc                
+```
+
+* Manifest for postgres db service:
+-----------------------------------
+```yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    db: psg-db
+  name: postgres  
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432  
+      protocol: TCP
+      targetPort: 5432
+  selector:
+    name: postgres
+```
+
+* Finally the saleor application
+   * deployment Manifest 
+```yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: saleor-core
+  name: saleor-core
+spec:
+  minReadySeconds: 5
+  replicas: 1
+  selector:
+    matchLabels:
+      name: saleor-core
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: 
+      maxSurge: 25%
+      maxUnavailable: 25%     
+  template:
+    metadata:
+      name: redis
+      labels:
+        name: saleor-core
+    spec:
+      containers:
+        - image: tarunkumarpendem/saleor-core:dev-1.0
+          name: saleor-core
+          ports:
+            - containerPort: 8000
+              protocol: TCP        
+```
+  * Saleor application service
+```yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: saleor-core
+  name: saleor-core  
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8000  
+      protocol: TCP
+      targetPort: 8000
+  selector:
+    name: saleor-core    
+```
+* Apply the manifests and check what they created
+![preview](Images/k8s27.png)
+![preview](Images/k8s28.png)
+![preview](Images/k8s29.png)
+
+* Erros:
+--------
+* After successful creation i'm getting the following error
+![preview](Images/k8s30.png)
+As of my knowledge it is beacuse of the database and application communication errror.
+![preview](Images/k8s31.png)
+![preview](Images/k8s32.png)
+![preview](Images/k8s33.png)

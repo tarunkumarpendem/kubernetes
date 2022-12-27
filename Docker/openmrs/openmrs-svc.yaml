@@ -13,4 +13,4 @@ spec:
   ports:
     - port: 8080
       name: openmrs-web-port
-      targetPort: 8080
+      
