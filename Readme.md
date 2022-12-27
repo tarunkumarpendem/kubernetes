@@ -505,6 +505,7 @@ metadata:
 spec:
   rules:
     - http:
+        host: openmrs-gol-spc-ingress
         paths:
           - path: /gameoflife
             backend:
@@ -519,7 +520,7 @@ spec:
                 name: apps-svc
                 port:
                   number: 10000
-            pathType: Exact               
+            pathType: Exact                              
 ```
 * Apply the manifest and check for workloads it created
 ![preview](Images/k8s12.png)

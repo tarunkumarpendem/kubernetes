@@ -95,6 +95,7 @@ metadata:
 spec:
   rules:
     - http:
+        host: openmrs-gol-spc-ingress
         paths:
           - path: /gameoflife
             backend:
