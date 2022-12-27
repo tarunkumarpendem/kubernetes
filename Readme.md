@@ -529,7 +529,7 @@ Here ingress is created but it doesn't gave ExternalIp which i need to clarify
 
 Errors:
 -------
-The following error in the EKS is getting repeated again and again which need to be fixed but the probelm is even though the instances are running fine and load balancers getting created but still the instances attached to load balancers are in OutOfService state which should be cleared
+* The following error in the EKS is getting repeated again and again which need to be fixed but the probelm is even though the instances are running fine and load balancers getting created but still the instances attached to load balancers are in OutOfService state which should be cleared
 ![preview](Images/k8s13.png) 
 ![preview](Images/k8s14.png)
 ![preview](Images/k8s15.png)
