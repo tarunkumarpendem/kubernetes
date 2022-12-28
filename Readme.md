@@ -957,8 +957,8 @@ spec:
 ![preview](Images/k8s28.png)
 ![preview](Images/k8s29.png)
 
-* Erros:
---------
+* Errors:
+---------
 * After successful creation i'm getting the following error
 ![preview](Images/k8s30.png)
 As of my knowledge it is beacuse of the database and application communication errror.
