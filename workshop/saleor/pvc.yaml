@@ -6,14 +6,17 @@ metadata:
   labels:
     app: saleor
 spec:
+  storageClassName: storageclass
   selector:
     matchLabels:
       app: saleor
-  storageClassName: gp2
   accessModes:
     - ReadWriteMany
   volumeName: mysqlvol
   resources:   
     requests:
-      storage: 10Gi      
+      storage: 1Gi      
       
+
+
+

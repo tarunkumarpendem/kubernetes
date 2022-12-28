@@ -1,0 +1,22 @@
+---
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: pod
+  labels:
+    name: pod
+spec:
+  containers:
+    - image: tarunkumarpendem/gol:1.0
+      name: test-pod
+      ports: 
+        - containerPort: 8080
+          protocol: TCP
+      volumeMounts: 
+        - name: test-vol
+          mountPath: /test    
+  volumes:
+    - name: test-vol 
+      persistentVolumeClaim:
+        claimName: my-retain-ssd-storage
+

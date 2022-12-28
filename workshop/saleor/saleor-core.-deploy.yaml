@@ -28,5 +28,12 @@ spec:
           ports:
             - containerPort: 8000
               protocol: TCP
+          volumeMounts:
+            - mountPath: /app
+              name: saleor-pvc    
+      volumes: 
+        - name: saleor-pvc
+          persistentVolumeClaim:
+            claimName: saleor-pvc        
           
 
