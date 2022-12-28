@@ -961,7 +961,7 @@ spec:
 ---------
 * After successful creation i'm getting the following error
 ![preview](Images/k8s30.png)
-As of my knowledge it is beacuse of the database and application communication errror.
+As of my knowledge it is beacuse of the database and application communication error.
 ![preview](Images/k8s31.png)
 ![preview](Images/k8s32.png)
 ![preview](Images/k8s33.png)
