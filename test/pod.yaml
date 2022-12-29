@@ -18,5 +18,5 @@ spec:
   volumes:
     - name: test-vol 
       persistentVolumeClaim:
-        claimName: my-retain-ssd-storage
+        claimName: saleor-2-pvc
 

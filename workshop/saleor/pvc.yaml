@@ -2,17 +2,13 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: saleor-pvc
+  name: saleor-2-pvc
   labels:
     app: saleor
 spec:
-  storageClassName: storageclass
-  selector:
-    matchLabels:
-      app: saleor
+  storageClassName: ebs-sc
   accessModes:
     - ReadWriteMany
-  volumeName: mysqlvol
   resources:   
     requests:
       storage: 1Gi      
