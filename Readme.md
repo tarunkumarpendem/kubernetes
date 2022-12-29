@@ -31,10 +31,10 @@ pipeline{
     }
 }
 ```
-![preview](./Images/k8s7.png)
-![preview](./Images/k8s2.png)
+![Preview](./Images/k8s7.png)
+![Preview](./Images/k8s2.png)
 * After the successful containarization of  the application manually.
-![preview](./Images/k8s3.png)
+![Preview](./Images/k8s3.png)
   
 * Then i tried deploy the applcation from kubernetes(K8s) For that we need to write the manifests
 
@@ -95,9 +95,9 @@ spec:
       name: gameoflife-webport
 ``` 
 * Then appply these yaml files to create deployments and services from K8s cluster
-![preview](./Images/k8s4.png)
-![preview](./Images/k8s9.png)
-![preview](./Images/k8s10.png)
+![Preview](./Images/k8s4.png)
+![Preview](./Images/k8s9.png)
+![Preview](./Images/k8s10.png)
 * Then we can access the application with the dns name of the load balancer which is created from the service manifest which we written
 
 
@@ -135,10 +135,10 @@ pipeline{
     }
 }
 ```
-![preview](./Images/k8s16.png)
-![preview](./Images/k8s17.png)
+![Preview](./Images/k8s16.png)
+![Preview](./Images/k8s17.png)
 * After the successful containarization of  the application manually.
-![preview](./Images/k8s18.png)
+![Preview](./Images/k8s18.png)
   
 * Then i tried deploy the applcation from kubernetes(K8s) For that we need to write the manifests
 
@@ -197,7 +197,7 @@ spec:
       name: spring-petclinic-webport     
 ``` 
 * Then appply these yaml files to create deployments and services from K8s cluster
-![preview](./Images/k8s19.png)
+![Preview](./Images/k8s19.png)
 * Then we can access the application with the dns name of the load balancer which is created from the service manifest which we written
 
 
@@ -240,10 +240,10 @@ pipeline{
     }
 }
 ```
-![preview](./Images/k8s6.png)
-![preview](./Images/k8s5.png)
+![Preview](./Images/k8s6.png)
+![Preview](./Images/k8s5.png)
 * After the successful containarization of  the application manually.
-![preview](./Images/k8s8.png)
+![Preview](./Images/k8s8.png)
   
 * Then i tried deploy the applcation from kubernetes(K8s) For that we need to write the manifests a database deployment and service is also requied (but not nescessary to run this application) for this openmrs and for database it generally has a volume for that i created a PersistentVolumeClaims and attached it to mysql database 
 
@@ -389,10 +389,10 @@ spec:
       name: mysql-port
 ```
 * Then appply these yaml files to create Deployments, Volumes and Services from K8s cluster
-![preview](./Images/k8s9.png)
-![preview](./Images/k8s10.png)
+![Preview](./Images/k8s9.png)
+![Preview](./Images/k8s10.png)
 * Then we can access the application with the dns name of the load balancer which is created from the service manifest which we written
-![preview](./Images/k8s11.png)
+![Preview](./Images/k8s11.png)
 
 
 ### K8s Ingress workload:
@@ -519,9 +519,9 @@ spec:
             pathType: Exact                                             
 ```
 * Apply the manifest and check for workloads it created
-![preview](./Images/k8s12.png)
-![preview](./Images/k8s34.png)
-![preview](./Images/k8s35.png)
+![Preview](./Images/k8s12.png)
+![Preview](./Images/k8s34.png)
+![Preview](./Images/k8s35.png)
 * Try to access the applications
 
 Here ingress is created but it doesn't gave ExternalIp which i need to clarify
@@ -529,12 +529,12 @@ Here ingress is created but it doesn't gave ExternalIp which i need to clarify
 Errors:
 -------
 * The following error in the EKS is getting repeated again and again which need to be fixed but the probelm is even though the instances are running fine and load balancers getting created but still the instances attached to load balancers are in OutOfService state which should be cleared
-![preview](./Images/k8s13.png) 
-![preview](./Images/k8s14.png)
-![preview](./Images/k8s15.png)
+![Preview](./Images/k8s13.png) 
+![Preview](./Images/k8s14.png)
+![Preview](./Images/k8s15.png)
 
 Because of the above error i'm getting till only this 
-![preview](.//Images/k8s1.png)
+![Preview](.//Images/k8s1.png)
 
 
 
@@ -554,7 +554,7 @@ Because of the above error i'm getting till only this
     `docker compose run --rm api python3 manage.py createsuperuser`
     `docker compose up -d`
 * then access the application 
-![preview](./Images/k8s21.png)
+![Preview](./Images/k8s21.png)
 
 * Now build the image for saleor-dashboard and push it to dockerhub from jenkins
 clone the code from `https://github.com/saleor/saleor-dashboard.git` then cd into it `cd saleor-dashboard` then build and push the image from the Dockerfile in the repo doing this from jenkins
@@ -635,10 +635,10 @@ pipeline{
     } 
 }
 ```
-![preview](./Images/k8s22.png)
-![preview](./Images/k8s23.png)
+![Preview](./Images/k8s22.png)
+![Preview](./Images/k8s23.png)
 * then try to run the container with image which is pushed to dockerhub
-![preview](./Images/k8s24.png)
+![Preview](./Images/k8s24.png)
 
 * Now do the same for saleor also
 clone the code from `https://github.com/tarunkumarpendem/saleor.git`
@@ -747,8 +747,8 @@ pipeline{
     }
 }
 ```
-![preview](./Images/k8s25.png)
-![preview](./Images/k8s26.png)
+![Preview](./Images/k8s25.png)
+![Preview](./Images/k8s26.png)
 
 
 * To deploy it from K8s we need manifests:
@@ -953,15 +953,15 @@ spec:
     name: saleor-core    
 ```
 * Apply the manifests and check what they created
-![preview](./Images/k8s27.png)
-![preview](./Images/k8s28.png)
-![preview](./Images/k8s29.png)
+![Preview](./Images/k8s27.png)
+![Preview](./Images/k8s28.png)
+![Preview](./Images/k8s29.png)
 
 * Errors:
 ---------
 * After successful creation i'm getting the following error
-![preview](./Images/k8s30.png)
+![Preview](./Images/k8s30.png)
 As of my knowledge it is beacuse of the database and application communication error.
-![preview](./Images/k8s31.png)
-![preview](./Images/k8s32.png)
-![preview](./Images/k8s33.png)
+![Preview](./Images/k8s31.png)
+![Preview](./Images/k8s32.png)
+![Preview](./Images/k8s33.png)
