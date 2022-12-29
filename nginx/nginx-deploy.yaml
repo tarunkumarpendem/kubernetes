@@ -28,6 +28,14 @@ spec:
           ports:
             - containerPort: 80
               protocol: TCP
+          volumeMounts: 
+            - name: test-vol
+              mountPath: /var/www    
+      volumes:
+        - name: test-vol 
+          persistentVolumeClaim:
+            claimName: saleor-pvc
+    
                 
       
 

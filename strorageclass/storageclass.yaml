@@ -5,12 +5,12 @@ metadata:
   name: storageclass
   labels:
     name: storageclass
-provisioner: kubernetes.io/aws-ebs
-parameters:
-  type: gp3
+provisioner: ebs.csi.aws.com
 reclaimPolicy: Retain
 allowVolumeExpansion: true
 mountOptions:
   - debug
 volumeBindingMode: Immediate
   
+
+ 

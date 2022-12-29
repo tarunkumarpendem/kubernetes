@@ -2,17 +2,16 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: saleor-2-pvc
-  labels:
-    app: saleor
+  name: saleor-pvc
 spec:
   storageClassName: ebs-sc
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:   
     requests:
       storage: 1Gi      
-      
+
+
 
 
 

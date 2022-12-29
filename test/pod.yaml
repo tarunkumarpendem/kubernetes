@@ -14,9 +14,9 @@ spec:
           protocol: TCP
       volumeMounts: 
         - name: test-vol
-          mountPath: /test    
+          mountPath: /test  
   volumes:
     - name: test-vol 
       persistentVolumeClaim:
-        claimName: saleor-2-pvc
+        claimName: saleor-vol
 
