@@ -95,8 +95,11 @@ spec:
       name: gameoflife-webport
 ``` 
 * Then appply these yaml files to create deployments and services from K8s cluster
+
 ![Preview](./Images/k8s4.png)
+
 ![Preview](./Images/k8s9.png)
+
 ![Preview](./Images/k8s10.png)
 * Then we can access the application with the dns name of the load balancer which is created from the service manifest which we written
 
