@@ -87,7 +87,3 @@ spec:
 * Apply the manifest and check for the created PVC
 ![Preview](./Images/csi-driver14.png)
 
-
-## Installing Ingress controller in eks:
-----------------------------------------
-[Refer Here](https://www.stacksimplify.com/aws-eks/aws-alb-ingress/aws-install-alb-ingress-controller-on-aws-eks-cluster/) for the documentation for installing ingress controller
