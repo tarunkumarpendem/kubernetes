@@ -473,23 +473,37 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: apps-svc
+  name: gol-svc
   labels:
-    name: apps-svc
+    name: gol-svc
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: gameoflife-webport 
+  selector:
+    app1: game-of-life-deploy 
+  type: ClusterIP   
+
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: openmrs-svc
+  labels:
+    name: openmrs-svc
 spec:
   ports:
     - port: 10000
       targetPort: 8080
       protocol: TCP
-      name: apps-webport-1
-    - port: 20000
-      targetPort: 8080
-      protocol: TCP
-      name: apps-webport-2  
+      name: openmrs-webport
   selector:
-    app1: game-of-life-deploy 
     app2: openmrs-deploy
-  type: LoadBalancer  
+  type: ClusterIP
 
 
 ---
@@ -498,10 +512,11 @@ kind: Ingress
 metadata:
   name: ingress
   annotations:
-    kubernetes.io/ingress.class: service.beta.kubernetes.io/aws-load-balancer-healthcheck-path
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
 spec:
   rules:
-    - host: openmrs-gol-spc-ingress
+    - host: openmrs-gol.com
       http:
         paths:
           - path: /gameoflife
@@ -517,7 +532,7 @@ spec:
                 name: apps-svc
                 port:
                   number: 20000
-            pathType: Exact                                             
+            pathType: Exact                                                           
 ```
 * Apply the manifest and check for workloads it created
 ![Preview](./Images/k8s12.png)
@@ -542,6 +557,7 @@ Because of the above error i'm getting till only this
 To test use `curl`
 `curl -i -H "Host: <domain-name>" http://<dns-name>`
 `curl -i -H "Host: hostname.mydomain.com" http://a3e9bdb42b375461092c909ef33ffa34-1e4268a0bbe372ac.elb.us-east-1.amazonaws.com`
+![Preview](./Images/k8s37.png)
 
 ## Saleor-core:
 ---------------
