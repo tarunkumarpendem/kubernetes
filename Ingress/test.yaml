@@ -66,22 +66,37 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: apps-svc
+  name: gol-svc
   labels:
-    name: apps-svc
+    name: gol-svc
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: gameoflife-webport 
+  selector:
+    app1: game-of-life-deploy 
+  type: ClusterIP   
+
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: openmrs-svc
+  labels:
+    name: openmrs-svc
 spec:
   ports:
     - port: 10000
       targetPort: 8080
       protocol: TCP
-      name: apps-webport-1
-    - port: 20000
-      targetPort: 8080
-      protocol: TCP
-      name: apps-webport-2  
+      name: openmrs-webport
   selector:
-    app1: game-of-life-deploy 
-    app2: openmrs-deploy 
+    app2: openmrs-deploy
+  type: ClusterIP
 
 
 ---

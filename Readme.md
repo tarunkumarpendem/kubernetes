@@ -535,10 +535,13 @@ Errors:
 ![Preview](./Images/k8s15.png)
 
 Because of the above error i'm getting till only this 
-![Preview](.//Images/k8s1.png)
+![Preview](./Images/k8s1.png)
 
-
-
+* Ingress output
+![Preview](./Images/k8s36.png)
+To test use `curl`
+`curl -i -H "Host: <domain-name>" http://<dns-name>`
+`curl -i -H "Host: hostname.mydomain.com" http://a3e9bdb42b375461092c909ef33ffa34-1e4268a0bbe372ac.elb.us-east-1.amazonaws.com`
 
 ## Saleor-core:
 ---------------
