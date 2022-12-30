@@ -24,6 +24,11 @@ spec:
     spec:
       containers:
         - image: library/postgres:13-alpine
+          env:
+            - name: POSTGRES_USER
+              value: saleor
+            - name: POSTGRES_PASSWORD
+              value: saleor  
           name: postgres-db
           ports:
             - containerPort: 5432
