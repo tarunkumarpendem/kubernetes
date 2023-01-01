@@ -149,3 +149,10 @@ spec:
 hosts: `hostname.mydomain.com`  `apache.mydomain.com`
 dns in my case: `a3fadfbff6f4f4444881a15f67f53a22-73a16740cf453860.elb.us-east-1.amazonaws.com`
 ![Preview](./Images/ingress12.png)
+
+Errors so far:
+--------------
+![Preview](./Images/ingress13.png)
+![Preview](./Images/ingress14.png)
+![Preview](./Images/ingress15.png)
+![Preview](./Images/ingress16.png)

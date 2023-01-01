@@ -1,0 +1,170 @@
+---
+apiVersion: apps/v1 
+kind: Deployment 
+metadata:
+  name: hostname-app
+  namespace: default 
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hostname-app
+  template:
+    metadata:
+      labels:
+        app: hostname-app
+    spec:
+      containers:
+      - name: hostname-app
+        image: k8s.gcr.io/serve_hostname:1.1 
+
+
+---
+apiVersion: apps/v1 
+kind: Deployment 
+metadata:
+  name: apache-app
+  namespace: default 
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: apache-app
+  template:
+    metadata:
+      labels:
+        app: apache-app
+    spec:
+      containers:
+      - name: apache-app
+        image: httpd:latest
+        ports:
+        - containerPort: 80 
+
+--- 
+apiVersion: v1 
+kind: Service 
+metadata:
+  name: hostname-svc
+  namespace: default 
+spec:
+  ports:
+  - port: 80
+    targetPort: 9376
+    protocol: TCP
+  selector:
+    app: hostname-app
+
+--- 
+apiVersion: v1 
+kind: Service 
+metadata:
+  name: apache-svc
+  namespace: default
+  labels: 
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+  selector:
+    app: apache-app
+
+---
+apiVersion: networking.k8s.io/v1 
+kind: Ingress 
+metadata:
+  name: micro-ingress
+  namespace: default
+  annotations: 
+    kubernetes.io/ingress.class: nginx 
+spec:
+  rules:
+    - host: hostname.mydomain.com
+      http:
+        paths:
+        - backend:
+            service:
+              name: hostname-svc
+              port:
+                number: 80
+          path: /
+          pathType: Prefix
+    - host: apache.mydomain.com
+      http:
+        paths:
+        - backend:
+            service:
+              name: apache-svc
+              port:
+                number: 80
+          path: /
+          pathType: Prefix
+
+
+# path-based routing
+---
+apiVersion: networking.k8s.io/v1 
+kind: Ingress 
+metadata:
+  name: path-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: nginxd
+    nginx.ingress.kubernetes.io/rewrite-target: / 
+spec:
+  rules:
+  - host: mydomain.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: hostname-svc
+            port:
+              number: 80
+        path: /hostname
+        pathType: Prefix
+  - host: mydomain.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: apache-svc
+            port:
+              number: 80
+        path: /apache
+        pathType: Prefix
+
+
+# Manifest for launching alb
+---
+apiVersion: networking.k8s.io/v1 
+kind: Ingress 
+metadata:
+  name: micro-ingress-alb
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: alb 
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip 
+spec:
+  rules:
+  - host: alb.hostname.mydomain.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: hostname-svc
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  - host: alb.apache.mydomain.com
+    http:
+      - backend:
+          service:
+            name: apache-svc
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
