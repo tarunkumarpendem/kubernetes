@@ -34,24 +34,7 @@ spec:
               command:
                 - pwd 
 
----
-apiVersion: v1 
-kind: Service
-metadata:
-  name: jenkins-svc
-  labels:
-    app: jenkins
-    version: "jdk-11"
-spec:
-  selector:
-    app: jenkins
-    jdkversion: "jdk-11"
-  type: LoadBalancer 
-  ports:
-    - port: 8080
-      targetPort: 8080
-      name: jenkins-app-port
-      protocol: TCP
+
       
 
                 
