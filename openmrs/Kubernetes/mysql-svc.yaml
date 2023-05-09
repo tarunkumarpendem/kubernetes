@@ -6,10 +6,13 @@ metadata:
   labels:
     db: mysql
 spec:
-  ports: 
+  selector:
+    db: mysql-db
+  type: ClusterIP 
+  ports:
     - port: 3306
       targetPort: 3306
-      name: mysql-port
-  selector:
-    mysql-statefulset
-  type: ClusterIP  
+      name: mysql-db-port
+      protocol: TCP  
+
+  
