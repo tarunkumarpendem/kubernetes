@@ -45,10 +45,15 @@ spec:
               cpu: "1000m"
           volumeMounts:
             - mountPath: /var/lib/mysql
-              name: mysql-vol 
-      volumes: 
-        - name: mysql-vol
-          persistentVolumeClaim:
-            claimName: mysql-pvc     
-            
+              name: mysql-vol     
+  volumeClaimTemplates:
+    - metadata:
+        name: mysql-vol
+      spec:
+        accessModes: 
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: ebs-sc          
         
