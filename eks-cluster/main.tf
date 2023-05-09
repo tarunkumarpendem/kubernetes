@@ -138,9 +138,9 @@ resource "aws_instance" "kubectl" {
       "cd scripting",
       "sh kubectl.sh",
       "aws eks update-kubeconfig --region us-east-1 --name dev_eks_cluster_For_Dev",
-      "kubectl apply -k github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=master",
-      "wget https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/aws/deploy.yaml to deploy namespace, serviceaccounts, configmap, clusterroles, clusterrolebindings, roles, rolebindings, services, deployments, ingressclasses, and validatingwebhookconfigurations",
-      "kubectl apply -f deploy.yaml"
+      "kubectl apply -k github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=master"
+      # "wget https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/aws/deploy.yaml to deploy namespace, serviceaccounts, configmap, clusterroles, clusterrolebindings, roles, rolebindings, services, deployments, ingressclasses, and validatingwebhookconfigurations",
+      # "kubectl apply -f deploy.yaml"
      ]
   }
   depends_on = [ 

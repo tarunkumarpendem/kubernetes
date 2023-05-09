@@ -1,0 +1,28 @@
+# ---
+# apiVersion: v1 
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: mysql-pvc
+#   namespace: dev
+# spec:
+#   accessModes: 
+#     - ReadWriteOnce
+#   resources: 
+#     requests:
+#       storage: 3Gi 
+#   storageClassName: pvc-sc-aws
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+  namespace: dev
+spec:
+  storageClassName: ebs-sc
+  accessModes:
+    - ReadWriteOnce
+  resources:   
+    requests:
+      storage: 1Gi
+  

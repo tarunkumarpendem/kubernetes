@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql-deploy
+  labels:
+    db: mysql
+  namespace: dev
+spec:
+  minReadySeconds: 3
+  replicas: 4
+  selector:
+    matchLabels:
+      db: mysql-db
+  updateStrategy:    
+    type: RollingUpdate
+    rollingUpdate:
+      partition: 1
+      maxUnavailable: 25%
+  template:
+    metadata:
+      name: mysql-deployment
+      namespace: dev
+      labels:
+        db: mysql-db
+    spec:
+      containers:
+        - name: mysql-pods
+          image: mysql:5.7.42
+          ports:
+            - containerPort: 3306
+              protocol: TCP 
+              name: mysql-port
+          envFrom:
+            - secretRef:
+                name: db-cred
+                optional: false
+          resources:
+            requests:
+              memory: "250Mi"
+              cpu: "500m"
+            limits:
+              memory: "750Mi"
+              cpu: "1000m"
+          volumeMounts:
+            - mountPath: /var/lib/
+              name: mysql-vol
+              subPath: mysql
+      volumes: 
+        - name: mysql-vol
+          persistentVolumeClaim:
+            claimName: mysql-pvc     
+            
+        
