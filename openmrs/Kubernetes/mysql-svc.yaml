@@ -11,5 +11,5 @@ spec:
       targetPort: 3306
       name: mysql-port
   selector:
-    mysql-deploy
+    mysql-statefulset
   type: ClusterIP  
