@@ -9,6 +9,7 @@ spec:
   selector:
     db: mysql-db
   type: ClusterIP 
+  clusterIP: None
   ports:
     - port: 3306
       targetPort: 3306

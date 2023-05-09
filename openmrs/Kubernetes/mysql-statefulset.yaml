@@ -44,9 +44,8 @@ spec:
               memory: "750Mi"
               cpu: "1000m"
           volumeMounts:
-            - mountPath: /var/lib/
-              name: mysql-vol
-              subPath: mysql
+            - mountPath: /var/lib/mysql
+              name: mysql-vol 
       volumes: 
         - name: mysql-vol
           persistentVolumeClaim:
