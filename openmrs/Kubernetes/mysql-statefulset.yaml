@@ -2,11 +2,12 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mysql-deploy
+  name: mysql-statefulset
   labels:
     db: mysql
   namespace: dev
 spec:
+  serviceName: mysql-svc
   minReadySeconds: 3
   replicas: 4
   selector:
@@ -19,7 +20,7 @@ spec:
       maxUnavailable: 25%
   template:
     metadata:
-      name: mysql-deployment
+      name: mysql-statefulset
       namespace: dev
       labels:
         db: mysql-db
