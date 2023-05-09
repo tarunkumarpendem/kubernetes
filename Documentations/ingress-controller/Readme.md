@@ -100,7 +100,7 @@ spec:
 ![Preview](./Images/ingress6.png)
 
 * We can also check the deployments and services which we created in default namespace using
-deploment: `kubectl get deployment hostname-app apache-app -n default`
+deployment: `kubectl get deployment hostname-app apache-app -n default`
 service: `kubectl get svc apache-svc hostname-svc -n default`
 ![Preview](./Images/ingress7.png)
 * Now get dns of the service which we created using `kubectl get svc -A` which gives available services in all the namespaces with in the kubernetes cluster then try to ping using `curl` with the dns
