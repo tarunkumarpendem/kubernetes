@@ -1,4 +1,4 @@
+---
 resources:
   - wordpress-deploy.yaml
   - wordpress-svc.yaml
-  
