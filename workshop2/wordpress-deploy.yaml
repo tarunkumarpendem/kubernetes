@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+  labels:
+    app: word-press-application
+spec:
+  minReadySeconds: 2
+  replicas: 4
+  selector:
+    matchLabels:
+      app: word-press-app
+      type: html
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 25%
+  template:
+    metadata:  
+      name: word-press
+      labels:
+        app: word-press-app
+        type: html
+    spec:
+      activeDeadlineSeconds: 5
+      containers:
+        - image: shaikkhajaibrahim/dashboardservice:1.0.0
+          name: word-press-container
+          ports:
+            - containerPort: 80
+              name: wordpress-port
+              protocol: TCP 
+          
