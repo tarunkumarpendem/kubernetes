@@ -24,7 +24,6 @@ spec:
         app: word-press-app
         type: html
     spec:
-      activeDeadlineSeconds: 5
       containers:
         - image: shaikkhajaibrahim/dashboardservice:1.0.0
           name: word-press-container
