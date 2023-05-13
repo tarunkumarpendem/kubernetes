@@ -8,7 +8,7 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    app: word-press-application
+    app: word-press-app
   ports:
     - name: wordpress-webport
       port: 80
