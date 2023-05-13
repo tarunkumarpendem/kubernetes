@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress-svc
+  labels:
+    app: wordpress
+spec:
+  type: LoadBalancer
+  selector:
+    app: word-press-app
+  ports:
+    - name: wordpress-webport
+      port: 80
