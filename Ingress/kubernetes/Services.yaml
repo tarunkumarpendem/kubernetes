@@ -1,0 +1,123 @@
+#########################
+# Default Service
+#########################
+
+---
+apiVersion: v1 
+kind: Service
+metadata:
+  name: default-svc 
+spec:
+  ports:
+    - name: default-svc-port
+      port: 80
+      protocol: TCP
+  selector:
+    app: default-app
+  type: ClusterIP
+
+
+#########################
+# Basket Service
+#########################
+
+---
+apiVersion: v1 
+kind: Service
+metadata:
+  name: basket-svc 
+spec:
+  ports:
+    - name: basket-svc-port
+      port: 80
+      protocol: TCP
+  selector:
+    app: basket-app
+  type: ClusterIP
+
+
+#########################
+# Catalog Service
+#########################
+
+---
+apiVersion: v1 
+kind: Service
+metadata:
+  name: catalog-svc 
+spec:
+  ports:
+    - name: catalog-svc-port
+      port: 80
+      protocol: TCP
+  selector:
+    app: catalog-app
+  type: ClusterIP
+
+
+#########################
+# Identity Service
+#########################
+
+---
+apiVersion: v1 
+kind: Service
+metadata:
+  name: identity-svc 
+spec:
+  ports:
+    - name: identity-svc-port
+      port: 80
+      protocol: TCP
+  selector:
+    app: identity-app
+  type: ClusterIP
+
+
+#########################
+# Notifications Service
+#########################
+
+---
+apiVersion: v1 
+kind: Service
+metadata:
+  name: notifications-svc 
+spec:
+  ports:
+    - name: notifications-svc-port
+      port: 80
+      protocol: TCP
+  selector:
+    app: notifications-app
+  type: ClusterIP
+
+
+#########################
+# Orders Service
+#########################
+
+---
+apiVersion: v1 
+kind: Service
+metadata:
+  name: orders-svc 
+spec:
+  ports:
+    - name: orders-svc-port
+      port: 80
+      protocol: TCP
+  selector:
+    app: orders-app
+  type: ClusterIP
+
+
+
+
+
+
+
+
+
+
+

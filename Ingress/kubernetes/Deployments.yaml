@@ -1,0 +1,317 @@
+########################
+# Default Deployment
+########################
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: default-deployment
+spec:
+  minReadySeconds: 2
+  replicas: 2
+  selector:
+    matchLabels:
+      app: default-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: 
+      maxSurge: 25%
+      maxUnavailable: 1
+  template:
+    metadata: 
+      name: default-pod
+      labels:
+        app: default-app
+        version: "1.0.0"
+    spec:
+      containers:
+        - image: 116710275660.dkr.ecr.us-east-1.amazonaws.com/for-poc:nginx-1.23
+          name: default-container
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+          readinessProbe:
+            exec:
+              command:
+                - pwd
+                - ls
+          ports:
+            - containerPort: 80
+              name: default-port
+              protocol: TCP
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+
+#########################
+# Basket Deployment
+#########################
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: basket-deployment
+spec:
+  minReadySeconds: 2
+  replicas: 2
+  selector:
+    matchLabels:
+      app: basket-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: 
+      maxSurge: 25%
+      maxUnavailable: 1
+  template:
+    metadata: 
+      name: basket-pod
+      labels:
+        app: basket-app
+        version: "1.0.0"
+    spec:
+      containers:
+        - image: 116710275660.dkr.ecr.us-east-1.amazonaws.com/for-poc:basket-svc-image-1.0.0
+          name: basket-container
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+          readinessProbe:
+            exec:
+              command:
+                - pwd
+                - ls
+          ports:
+            - containerPort: 80
+              name: basket-port
+              protocol: TCP
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+
+
+##############################
+# Catalog-deployment
+##############################
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-deployment
+spec:
+  minReadySeconds: 2
+  replicas: 2
+  selector:
+    matchLabels:
+      app: catalog-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: 
+      maxSurge: 25%
+      maxUnavailable: 1
+  template:
+    metadata: 
+      name: catalog-pod
+      labels:
+        app: catalog-app
+        version: "1.0.0"
+    spec:
+      containers:
+        - image: 116710275660.dkr.ecr.us-east-1.amazonaws.com/for-poc:catalog-svc-image-1.0.0
+          name: catalog-container
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+          readinessProbe:
+            exec:
+              command:
+                - pwd
+                - ls
+          ports:
+            - containerPort: 80
+              name: catalog-port
+              protocol: TCP
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+
+
+########################
+# Identity-deployment
+########################
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: identity-deployment
+spec:
+  minReadySeconds: 2
+  replicas: 2
+  selector:
+    matchLabels:
+      app: identity-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: 
+      maxSurge: 25%
+      maxUnavailable: 1
+  template:
+    metadata: 
+      name: identity-pod
+      labels:
+        app: identity-app
+        version: "1.0.0"
+    spec:
+      containers:
+        - image: 116710275660.dkr.ecr.us-east-1.amazonaws.com/for-poc:identity-svc-image-1.0.0
+          name: identity-container
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+          readinessProbe:
+            exec:
+              command:
+                - pwd
+                - ls
+          ports:
+            - containerPort: 80
+              name: identity-port
+              protocol: TCP
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+
+
+##############################
+# Notifications-deployment
+##############################
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notifications-deployment
+spec:
+  minReadySeconds: 2
+  replicas: 2
+  selector:
+    matchLabels:
+      app: notifications-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: 
+      maxSurge: 25%
+      maxUnavailable: 1
+  template:
+    metadata: 
+      name: notifications-pod
+      labels:
+        app: notifications-app
+        version: "1.0.0"
+    spec:
+      containers:
+        - image: 116710275660.dkr.ecr.us-east-1.amazonaws.com/for-poc:notifications-svc-image-1.0.0
+          name: notifications-container
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+          readinessProbe:
+            exec:
+              command:
+                - pwd
+                - ls
+          ports:
+            - containerPort: 80
+              name: notific-port
+              protocol: TCP
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+
+
+########################
+# Orders-deployment
+########################
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-deployment
+spec:
+  minReadySeconds: 2
+  replicas: 2
+  selector:
+    matchLabels:
+      app: orders-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: 
+      maxSurge: 25%
+      maxUnavailable: 1
+  template:
+    metadata: 
+      name: orders-pod
+      labels:
+        app: orders-app
+        version: "1.0.0"
+    spec:
+      containers:
+        - image: 116710275660.dkr.ecr.us-east-1.amazonaws.com/for-poc:orders-svc-image-1.0.0
+          name: orders-container
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+          readinessProbe:
+            exec:
+              command:
+                - pwd
+                - ls
+          ports:
+            - containerPort: 80
+              name: orders-port
+              protocol: TCP
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+
+
+
+
+
+
+
+

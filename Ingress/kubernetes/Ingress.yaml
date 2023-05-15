@@ -1,0 +1,135 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ecommerce-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  defaultBackend:
+    service: 
+      name: default-svc
+      port:  
+        number: 80
+  rules:
+    - http:
+        paths:
+          - path: /basket(/|$)(.*)
+            pathType: Prefix
+            backend: 
+              service: 
+                name: basket-svc
+                port:
+                  number: 80
+          - path: /catalog(/|$)(.*)
+            pathType: Prefix
+            backend: 
+              service: 
+                name: catalog-svc
+                port:
+                  number: 80
+          - path: /identity(/|$)(.*)
+            pathType: Prefix
+            backend: 
+              service: 
+                name: identity-svc
+                port:
+                  number: 80
+          - path: /notifications(/|$)(.*)
+            pathType: Prefix
+            backend: 
+              service: 
+                name: notifications-svc
+                port:
+                  number: 80
+          - path: /complaint(/|$)(.*)
+            pathType: Prefix
+            backend: 
+              service: 
+                name: notifications-svc
+                port:
+                  number: 80
+          - path: /orders(/|$)(.*)
+            pathType: Prefix
+            backend: 
+              service: 
+                name: orders-svc
+                port:
+                  number: 80
+
+
+
+########################################
+# Ingress Installation steps using helm
+########################################
+
+# helm repo add nginx-stable https://helm.nginx.com/stable
+# helm repo update
+# helm upgrade --install ingress-nginx ingress-nginx \
+#              --repo https://kubernetes.github.io/ingress-nginx \
+#              --namespace ingress-nginx --create-namespace
+
+
+
+########################
+# Ingress Output
+########################
+
+# NAME: ingress-nginx
+# LAST DEPLOYED: Mon May 15 08:27:47 2023
+# NAMESPACE: ingress-nginx
+# STATUS: deployed
+# REVISION: 1
+# TEST SUITE: None
+# NOTES:
+# The ingress-nginx controller has been installed.
+# It may take a few minutes for the LoadBalancer IP to be available.
+# You can watch the status by running 'kubectl --namespace ingress-nginx get services -o wide -w ingress-nginx-controller'
+
+# An example Ingress that makes use of the controller:
+#   apiVersion: networking.k8s.io/v1
+#   kind: Ingress
+#   metadata:
+#     name: example
+#     namespace: foo
+#   spec:
+#     ingressClassName: nginx
+#     rules:
+#       - host: www.example.com
+#         http:
+#           paths:
+#             - pathType: Prefix
+#               backend:
+#                 service:
+#                   name: exampleService
+#                   port:
+#                     number: 80
+#               path: /
+#     # This section is only required if TLS is to be enabled for the Ingress
+#     tls:
+#       - hosts:
+#         - www.example.com
+#         secretName: example-tls
+
+# If TLS is enabled for the Ingress, a Secret containing the certificate and key must also be provided:
+
+#   apiVersion: v1
+#   kind: Secret
+#   metadata:
+#     name: example-tls
+#     namespace: foo
+#   data:
+#     tls.crt: <base64 encoded cert>
+#     tls.key: <base64 encoded key>
+#   type: kubernetes.io/tls
+
+
+#################################
+# Ingreess verifying commands
+#################################
+
+# kubectl --namespace ingress-nginx get services -o wide -w ingress-nginx-controller
+# kubectl get ingress
+# kubectl get svc
