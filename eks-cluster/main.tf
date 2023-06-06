@@ -141,7 +141,7 @@ resource "aws_instance" "kubectl" {
       "kubectl apply -k github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=master"
       # "wget https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/aws/deploy.yaml to deploy namespace, serviceaccounts, configmap, clusterroles, clusterrolebindings, roles, rolebindings, services, deployments, ingressclasses, and validatingwebhookconfigurations",
       # "kubectl apply -f deploy.yaml"
-     ]
+    ]
   }
   depends_on = [ 
     aws_eks_node_group.eks_node_group1
@@ -266,6 +266,9 @@ resource "aws_eks_node_group" "eks_node_group1" {
   remote_access {
     ec2_ssh_key = var.node_group_details.ssh_key
     source_security_group_ids = [ aws_security_group.eks_security_group[0].id ]
+  }
+  update_config {
+    max_unavailable = 2
   }
   tags = {
     "Name" = var.node_group_details.node_group_tags[0]
